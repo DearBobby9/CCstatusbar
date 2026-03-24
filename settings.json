@@ -14,11 +14,10 @@
       },
       {
         "id": "3",
-        "type": "current-working-dir",
-        "color": "blue",
+        "type": "git-branch",
+        "color": "magenta",
         "metadata": {
-          "segments": "3",
-          "homeAbbreviation": "true"
+          "hideNoGit": "true"
         }
       },
       {
@@ -27,36 +26,6 @@
       },
       {
         "id": "5",
-        "type": "git-branch",
-        "color": "magenta",
-        "metadata": {
-          "hideNoGit": "true"
-        }
-      },
-      {
-        "id": "6",
-        "type": "git-insertions",
-        "color": "green",
-        "merge": true,
-        "metadata": {
-          "hideNoGit": "true"
-        }
-      },
-      {
-        "id": "7",
-        "type": "git-deletions",
-        "color": "red",
-        "merge": true,
-        "metadata": {
-          "hideNoGit": "true"
-        }
-      },
-      {
-        "id": "8",
-        "type": "separator"
-      },
-      {
-        "id": "9",
         "type": "git-worktree",
         "color": "yellow",
         "metadata": {
@@ -64,57 +33,46 @@
         }
       },
       {
-        "id": "30",
-        "type": "flex-separator"
+        "id": "6",
+        "type": "separator"
       },
       {
-        "id": "10",
+        "id": "7",
         "type": "thinking-effort",
         "color": "brightBlack"
       },
       {
-        "id": "11",
+        "id": "8",
         "type": "separator"
       },
       {
-        "id": "12",
+        "id": "9",
         "type": "session-clock",
         "color": "brightBlack"
       }
     ],
     [
       {
-        "id": "13",
-        "type": "context-bar",
+        "id": "10",
+        "type": "custom-command",
         "color": "green",
-        "metadata": {
-          "mode": "short"
-        }
+        "commandPath": "bash ~/.claude/context-bar.sh"
+      },
+      {
+        "id": "13",
+        "type": "separator"
       },
       {
         "id": "14",
-        "type": "separator"
-      },
-      {
-        "id": "15",
-        "type": "context-percentage",
-        "color": "green"
-      },
-      {
-        "id": "16",
-        "type": "separator"
-      },
-      {
-        "id": "17",
         "type": "session-cost",
         "color": "yellow"
       },
       {
-        "id": "18",
+        "id": "15",
         "type": "separator"
       },
       {
-        "id": "19",
+        "id": "16",
         "type": "output-speed",
         "color": "cyan",
         "metadata": {
@@ -122,13 +80,22 @@
         }
       },
       {
-        "id": "31",
-        "type": "flex-separator"
+        "id": "17",
+        "type": "separator"
+      },
+      {
+        "id": "18",
+        "type": "session-usage",
+        "color": "brightGreen"
+      },
+      {
+        "id": "19",
+        "type": "separator"
       },
       {
         "id": "20",
-        "type": "session-usage",
-        "color": "brightGreen"
+        "type": "weekly-usage",
+        "color": "brightYellow"
       },
       {
         "id": "21",
@@ -136,21 +103,12 @@
       },
       {
         "id": "22",
-        "type": "weekly-usage",
-        "color": "brightYellow"
-      },
-      {
-        "id": "23",
-        "type": "separator"
-      },
-      {
-        "id": "24",
         "type": "reset-timer",
         "color": "brightBlack"
       }
     ]
   ],
-  "flexMode": "full-until-compact",
+  "flexMode": "full",
   "compactThreshold": 60,
   "colorLevel": 2,
   "inheritSeparatorColors": false,

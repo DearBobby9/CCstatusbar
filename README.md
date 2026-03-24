@@ -1,6 +1,6 @@
 # CCstatusbar
 
-A two-line, responsive Claude Code statusline configuration powered by [ccstatusline](https://github.com/sirmalloc/ccstatusline).
+A clean two-line Claude Code statusline configuration powered by [ccstatusline](https://github.com/sirmalloc/ccstatusline), with a compact custom context bar.
 
 ## Screenshot
 
@@ -8,43 +8,45 @@ A two-line, responsive Claude Code statusline configuration powered by [ccstatus
 ![CCstatusbar Screenshot](assets/screenshot.png)
 
 ```
-Line 1: Model: Opus 4.6 (1M context) | cwd: .../Personal_project/DisplayOS | ⎇ main +3 -1 |       Thinking: max | Session: 29m
-Line 2: Context: [██████░░░░░░░░░░] 82k/1000k (8%) | Ctx: 8.0% | Cost: $3.28 | Out: 41.2 t/s   Session: 0.0% | Weekly: 17.0% | Reset: 4hr 53m
+Line 1: Model: Opus 4.6 (1M context) | ⎇ main | 🌲 main | Thinking: max | Session: 14hr 20m
+Line 2: [█░░░░░░░] 12% | Cost: $8.50 | Out: 35.6 t/s | Session: 6.0% | Weekly: 18.0% | Reset: 1hr 4m
 ```
 
 ## Features
 
-### Line 1 — Identity & Environment (left-right split)
+### Line 1 — Identity & Environment
 
-| Left | Right |
-|------|-------|
-| Model name (bold cyan) | Thinking effort level |
-| Working directory (3 segments) | Session duration |
-| Git branch + insertions/deletions | |
-| Git worktree name | |
+| Widget | Description |
+|--------|-------------|
+| Model (bold cyan) | Current model name |
+| Git Branch (magenta) | Current branch (auto-hides outside git repos) |
+| Git Worktree (yellow) | Worktree name (auto-hides outside git repos) |
+| Thinking Effort (gray) | Current thinking effort level |
+| Session Clock (gray) | Session duration |
 
-### Line 2 — Metrics & Economics (left-right split)
+### Line 2 — Metrics & Economics
 
-| Left | Right |
-|------|-------|
-| Context progress bar | Session API usage % |
-| Context percentage | Weekly API usage % |
-| Session cost ($) | 5h block reset countdown |
-| Output speed (tok/s, 30s window) | |
+| Widget | Description |
+|--------|-------------|
+| Context Bar (green) | Compact 8-char progress bar `[██░░░░░░] 12%` |
+| Session Cost (yellow) | Total session cost in USD |
+| Output Speed (cyan) | Token output speed (30s rolling window) |
+| Session Usage (green) | Daily API usage percentage |
+| Weekly Usage (yellow) | Weekly API usage percentage |
+| Reset Timer (gray) | 5-hour block reset countdown |
 
-### Responsive Layout
+### Custom Context Bar
 
-Uses `full-until-compact` mode:
-- **Context < 60%**: full terminal width (no truncation)
-- **Context >= 60%**: reserves 40 chars for Claude Code's auto-compact message
+The built-in ccstatusline context bar is 16-32 characters wide and not configurable. This config uses a `custom-command` widget with a tiny bash script (`context-bar.sh`) that renders an 8-character bar:
 
-### Smart Git Display
-
-Git widgets auto-hide when not in a git repository (`hideNoGit: true`).
+```
+Built-in:  [██░░░░░░░░░░░░░░] 124k/1000k (12%)   ~40 chars
+Custom:    [█░░░░░░░] 12%                          ~15 chars
+```
 
 ---
 
-## Quick Install (3 steps)
+## Install
 
 ### Step 1: Install ccstatusline
 
@@ -54,19 +56,22 @@ npx -y ccstatusline@latest
 
 > Faster with Bun: `bunx -y ccstatusline@latest`
 
-### Step 2: Copy the config
+### Step 2: Download config + context bar script
 
 ```bash
-# Download and apply the settings
+# Download settings
 curl -fsSL https://raw.githubusercontent.com/DearBobby9/CCstatusbar/main/settings.json \
   -o ~/.config/ccstatusline/settings.json
-```
 
-Or manually copy [`settings.json`](settings.json) to `~/.config/ccstatusline/settings.json`.
+# Download compact context bar script
+curl -fsSL https://raw.githubusercontent.com/DearBobby9/CCstatusbar/main/context-bar.sh \
+  -o ~/.claude/context-bar.sh
+chmod +x ~/.claude/context-bar.sh
+```
 
 ### Step 3: Configure Claude Code
 
-Add this to `~/.claude/settings.json`:
+Add to `~/.claude/settings.json`:
 
 ```json
 {
@@ -84,106 +89,23 @@ Exit and reopen. Done.
 
 ---
 
-## One-liner Install
+## One-liner
 
 ```bash
 npx -y ccstatusline@latest && \
-curl -fsSL https://raw.githubusercontent.com/DearBobby9/CCstatusbar/main/settings.json \
-  -o ~/.config/ccstatusline/settings.json && \
-echo "CCstatusbar installed! Restart Claude Code to see it."
+curl -fsSL https://raw.githubusercontent.com/DearBobby9/CCstatusbar/main/settings.json -o ~/.config/ccstatusline/settings.json && \
+curl -fsSL https://raw.githubusercontent.com/DearBobby9/CCstatusbar/main/context-bar.sh -o ~/.claude/context-bar.sh && \
+chmod +x ~/.claude/context-bar.sh && \
+echo "Done! Add statusLine config to ~/.claude/settings.json, then restart Claude Code."
 ```
-
-> Note: You still need to add the `statusLine` config to `~/.claude/settings.json` manually (Step 3 above).
 
 ---
 
 ## Customization
 
-### Option A: Interactive TUI
+Run `npx -y ccstatusline@latest` to open the interactive TUI editor.
 
-```bash
-npx -y ccstatusline@latest
-```
-
-Visual editor — add/remove/reorder widgets, change colors, toggle Powerline mode, preview in real-time.
-
-### Option B: Edit JSON directly
-
-Edit `~/.config/ccstatusline/settings.json`. See the full widget reference in [`ccstatusline-setup.md`](ccstatusline-setup.md).
-
-### Test without Claude Code
-
-```bash
-echo '{"model":{"display_name":"Opus"},"context_window":{"used_percentage":35},"cost":{"total_cost_usd":0.42}}' \
-  | npx -y ccstatusline@latest
-```
-
----
-
-## All Available Widgets
-
-<details>
-<summary>Click to expand full widget list</summary>
-
-### Basic Info
-| type | Description |
-|------|-------------|
-| `model` | Current model name |
-| `current-working-dir` | Working directory |
-| `session-clock` | Session duration |
-| `session-name` | Session name (via `/rename`) |
-| `thinking-effort` | Thinking effort level |
-| `version` | Claude Code version |
-| `vim-mode` | Vim mode (NORMAL/INSERT) |
-
-### Git
-| type | Description |
-|------|-------------|
-| `git-branch` | Current branch |
-| `git-changes` | Combined insertions + deletions |
-| `git-insertions` | Lines added (+42) |
-| `git-deletions` | Lines removed (-10) |
-| `git-root-dir` | Repo root directory name |
-| `git-worktree` | Active worktree name |
-
-### Context / Tokens
-| type | Description |
-|------|-------------|
-| `context-bar` | Visual progress bar |
-| `context-percentage` | Usage percentage |
-| `context-percentage-usable` | Usable context % (80% cap) |
-| `context-length` | Context window size |
-| `tokens-input` | Input token count |
-| `tokens-output` | Output token count |
-| `tokens-cached` | Cached token count |
-| `tokens-total` | Total token count |
-
-### Speed / Cost
-| type | Description |
-|------|-------------|
-| `input-speed` | Input tok/s |
-| `output-speed` | Output tok/s |
-| `total-speed` | Total tok/s |
-| `session-cost` | Session cost ($) |
-
-### Usage / Limits
-| type | Description |
-|------|-------------|
-| `session-usage` | Daily/session API usage % |
-| `weekly-usage` | Weekly API usage % |
-| `reset-timer` | 5h block reset countdown |
-| `weekly-reset-timer` | Weekly reset countdown |
-
-### Layout
-| type | Description |
-|------|-------------|
-| `separator` | Pipe divider `\|` |
-| `flex-separator` | Elastic space (right-align) |
-| `custom-text` | Custom text (emoji supported) |
-| `custom-command` | Shell command output |
-| `link` | Clickable terminal hyperlink (OSC 8) |
-
-</details>
+See [`ccstatusline-setup.md`](ccstatusline-setup.md) for the full widget reference and layout tips.
 
 ---
 
